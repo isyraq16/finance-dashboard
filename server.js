@@ -55,6 +55,24 @@ app.delete('/api/:section/:id', (req, res) => {
     res.json({ ok: true });
 });
 
+// EDIT entry
+app.put('/api/:section/:id', (req, res) => {
+    const { section, id } = req.params;
+    if (!SECTIONS.includes(section)) return res.status(404).json({ error: 'Not found' });
+    const db  = readDb();
+    const idx = db[section].findIndex(e => e.id === id);
+    if (idx === -1) return res.status(404).json({ error: 'Entry not found' });
+    db[section][idx] = { ...db[section][idx], ...req.body, id };
+    writeDb(db);
+    res.json(db[section][idx]);
+});
+
+// VERIFY password
+app.post('/api/auth', (req, res) => {
+    const pass = process.env.ADMIN_PASSWORD || 'HS9';
+    res.json({ ok: req.body.password === pass });
+});
+
 app.listen(PORT, () => {
     console.log(`\n  Finance Dashboard → http://localhost:${PORT}\n`);
 });
