@@ -1,0 +1,481 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Keluarga Portfolio</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Syne:wght@400;500;600;700&family=Syne+Mono&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg:          #080810;
+            --surface:     #0f0f1a;
+            --surface2:    #141420;
+            --border:      #1c1c2e;
+            --border-lt:   #252538;
+            --gold:        #c9a55a;
+            --gold-lt:     #e2c07e;
+            --gold-dim:    rgba(201,165,90,0.12);
+            --text:        #ede8e0;
+            --text-2:      #888899;
+            --text-3:      #3a3a52;
+            --green:       #5cba8a;
+            --red:         #d96060;
+            --blue:        #5588cc;
+        }
+        * { margin:0; padding:0; box-sizing:border-box; }
+        html { font-size:16px; }
+        body {
+            background: var(--bg);
+            color: var(--text);
+            font-family: 'Syne', sans-serif;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+        body::before {
+            content:'';
+            position:fixed; inset:0;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+            pointer-events:none; z-index:9999; opacity:.5;
+        }
+
+        /* ── HEADER ── */
+        header {
+            padding: 2.8rem 4rem 2rem;
+            border-bottom: 1px solid var(--border);
+            display: flex; justify-content: space-between; align-items: flex-end;
+            position: relative;
+        }
+        header::after {
+            content:''; position:absolute; bottom:-1px; left:4rem;
+            width:100px; height:1px; background: var(--gold);
+        }
+        .eyebrow {
+            font-family:'Syne Mono',monospace; font-size:.62rem; letter-spacing:.28em;
+            color:var(--gold); text-transform:uppercase; margin-bottom:.5rem;
+        }
+        h1 { font-family:'Cormorant Garamond',serif; font-size:2.8rem; font-weight:300; letter-spacing:.02em; line-height:1; }
+        h1 span { color:var(--gold); font-style:italic; }
+        .hdr-right { text-align:right; }
+        .hdr-label { font-family:'Syne Mono',monospace; font-size:.6rem; letter-spacing:.22em; color:var(--text-2); text-transform:uppercase; margin-bottom:.35rem; }
+        .hdr-total { font-family:'Cormorant Garamond',serif; font-size:2.2rem; font-weight:400; color:var(--gold-lt); letter-spacing:.02em; }
+
+        /* ── MAIN ── */
+        main { padding:2.5rem 4rem; display:flex; flex-direction:column; gap:1.8rem; max-width:1440px; }
+
+        /* ── CARD ── */
+        .card { background:var(--surface); border:1px solid var(--border); border-radius:2px; overflow:hidden; animation:fadeUp .45s ease both; }
+        .card:nth-child(1){animation-delay:.08s} .card:nth-child(2){animation-delay:.16s} .card:nth-child(3){animation-delay:.24s}
+        @keyframes fadeUp { from{opacity:0;transform:translateY(18px)} to{opacity:1;transform:translateY(0)} }
+
+        .card-head { padding:1.4rem 2rem; display:flex; justify-content:space-between; align-items:center; background:var(--surface2); border-bottom:1px solid var(--border); }
+        .card-title-row { display:flex; align-items:baseline; gap:.9rem; }
+        .card-icon { font-size:1rem; opacity:.6; }
+        .card-title { font-family:'Cormorant Garamond',serif; font-size:1.45rem; font-weight:400; letter-spacing:.03em; }
+        .card-count { font-family:'Syne Mono',monospace; font-size:.62rem; color:var(--text-2); letter-spacing:.1em; }
+        .card-stats { display:flex; align-items:center; gap:2rem; }
+        .stat { text-align:right; }
+        .stat-lbl { font-family:'Syne Mono',monospace; font-size:.58rem; letter-spacing:.2em; color:var(--text-2); text-transform:uppercase; }
+        .stat-val { font-family:'Cormorant Garamond',serif; font-size:1.25rem; font-weight:500; color:var(--gold-lt); letter-spacing:.02em; }
+
+        /* ── BUTTONS ── */
+        .btn-add { background:transparent; border:1px solid var(--gold); color:var(--gold); padding:.45rem 1.1rem; font-family:'Syne',sans-serif; font-size:.65rem; letter-spacing:.15em; text-transform:uppercase; cursor:pointer; transition:all .18s; border-radius:1px; }
+        .btn-add:hover { background:var(--gold-dim); color:var(--gold-lt); }
+
+        /* ── TABLE ── */
+        .tbl-wrap { overflow-x:auto; }
+        table { width:100%; border-collapse:collapse; }
+        thead tr { border-bottom:1px solid var(--border); }
+        thead th { padding:.75rem 2rem; text-align:left; font-family:'Syne Mono',monospace; font-size:.58rem; letter-spacing:.2em; color:var(--text-3); text-transform:uppercase; font-weight:500; }
+        thead th:last-child { text-align:right; }
+        tbody tr { border-bottom:1px solid var(--border); transition:background .12s; }
+        tbody tr:last-child { border-bottom:none; }
+        tbody tr:hover { background:var(--surface2); }
+        tbody td { padding:.95rem 2rem; font-size:.88rem; }
+        td.mono { font-family:'Syne Mono',monospace; font-size:.78rem; }
+        td.val  { font-family:'Cormorant Garamond',serif; font-size:1.1rem; }
+        td.pos  { color:var(--green); font-family:'Syne Mono',monospace; font-size:.8rem; }
+        td.neg  { color:var(--red);   font-family:'Syne Mono',monospace; font-size:.8rem; }
+
+        .badge { display:inline-block; padding:.18rem .55rem; border-radius:1px; font-size:.58rem; letter-spacing:.12em; text-transform:uppercase; font-family:'Syne Mono',monospace; }
+        .b-blue  { background:rgba(85,136,204,.12);  color:var(--blue);  border:1px solid rgba(85,136,204,.28); }
+        .b-green { background:rgba(92,186,138,.10);  color:var(--green); border:1px solid rgba(92,186,138,.25); }
+        .b-gold  { background:var(--gold-dim);        color:var(--gold);  border:1px solid rgba(201,165,90,.28); }
+        .b-red   { background:rgba(217,96,96,.10);    color:var(--red);   border:1px solid rgba(217,96,96,.25); }
+
+        .row-actions { display:flex; gap:.4rem; justify-content:flex-end; }
+        .btn-del { background:transparent; border:none; color:var(--text-3); cursor:pointer; padding:.25rem .4rem; font-size:.8rem; transition:color .15s; border-radius:2px; }
+        .btn-del:hover { color:var(--red); }
+
+        .empty { padding:2.5rem 2rem; text-align:center; }
+        .empty p { font-family:'Cormorant Garamond',serif; font-style:italic; font-size:1.05rem; color:var(--text-3); }
+
+        /* ── LOADING ── */
+        .loading { padding:2rem 2rem; text-align:center; }
+        .loading p { font-family:'Syne Mono',monospace; font-size:.7rem; letter-spacing:.2em; color:var(--text-3); animation:pulse 1.2s ease infinite; }
+        @keyframes pulse { 0%,100%{opacity:.3} 50%{opacity:.8} }
+
+        /* ── ADD FORM ── */
+        .add-form { display:none; padding:1.5rem 2rem; border-top:1px solid var(--border); background:#0b0b16; }
+        .add-form.open { display:block; animation:slideDown .2s ease; }
+        @keyframes slideDown { from{opacity:0;transform:translateY(-6px)} to{opacity:1;transform:translateY(0)} }
+        .form-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(190px,1fr)); gap:.9rem; margin-bottom:1rem; }
+        .fg { display:flex; flex-direction:column; gap:.35rem; }
+        .fg label { font-family:'Syne Mono',monospace; font-size:.58rem; letter-spacing:.2em; color:var(--text-2); text-transform:uppercase; }
+        .fg input, .fg select { background:var(--surface2); border:1px solid var(--border-lt); color:var(--text); padding:.55rem .75rem; font-family:'Syne',sans-serif; font-size:.84rem; border-radius:1px; outline:none; transition:border-color .15s; }
+        .fg input:focus, .fg select:focus { border-color:var(--gold); }
+        .fg select option { background:var(--surface2); }
+        .form-actions { display:flex; gap:.7rem; align-items:center; }
+        .btn-save { background:var(--gold); border:none; color:#08080f; padding:.55rem 1.4rem; font-family:'Syne',sans-serif; font-size:.68rem; font-weight:700; letter-spacing:.15em; text-transform:uppercase; cursor:pointer; transition:background .18s; border-radius:1px; }
+        .btn-save:hover { background:var(--gold-lt); }
+        .btn-save:disabled { opacity:.5; cursor:not-allowed; }
+        .btn-cxl { background:transparent; border:1px solid var(--border-lt); color:var(--text-2); padding:.55rem 1.1rem; font-family:'Syne',sans-serif; font-size:.68rem; letter-spacing:.15em; text-transform:uppercase; cursor:pointer; transition:all .18s; border-radius:1px; }
+        .btn-cxl:hover { border-color:var(--text-2); color:var(--text); }
+
+        /* ── FOOTER ── */
+        footer { padding:1.8rem 4rem; border-top:1px solid var(--border); display:flex; justify-content:space-between; align-items:center; margin-top:.5rem; }
+        footer p { font-family:'Syne Mono',monospace; font-size:.6rem; letter-spacing:.15em; color:var(--text-3); }
+        footer .lu { color:var(--text-2); }
+
+        /* ── RESPONSIVE ── */
+        @media(max-width:768px){
+            header,main,footer{padding-left:1.4rem;padding-right:1.4rem}
+            header{flex-direction:column;align-items:flex-start;gap:1.2rem}
+            .hdr-right{text-align:left}
+            .card-head{flex-wrap:wrap;gap:.8rem;padding:1rem 1.4rem}
+            thead th,tbody td{padding:.7rem 1rem}
+            .form-grid{grid-template-columns:1fr 1fr}
+            .add-form{padding:1rem 1.4rem}
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <div>
+        <div class="eyebrow">Private Wealth Portfolio</div>
+        <h1>Isyraq &amp; <span>Tuan Haji</span></h1>
+    </div>
+    <div class="hdr-right">
+        <div class="hdr-label">Total Portfolio</div>
+        <div class="hdr-total" id="grand-total">RM 0.00</div>
+    </div>
+</header>
+
+<main>
+
+    <!-- ── INVESTMENTS ── -->
+    <div class="card">
+        <div class="card-head">
+            <div class="card-title-row">
+                <span class="card-icon">◈</span>
+                <span class="card-title">Investments</span>
+                <span class="card-count" id="inv-count">—</span>
+            </div>
+            <div class="card-stats">
+                <div class="stat">
+                    <div class="stat-lbl">Total Value</div>
+                    <div class="stat-val" id="inv-total">—</div>
+                </div>
+                <button class="btn-add" onclick="toggle('investments')">+ Add</button>
+            </div>
+        </div>
+        <div class="tbl-wrap">
+            <table>
+                <thead><tr>
+                    <th>Name</th><th>Type</th><th>Amount (RM)</th>
+                    <th>Date</th><th>Notes</th><th>Actions</th>
+                </tr></thead>
+                <tbody id="inv-body"><tr><td colspan="6"><div class="loading"><p>Loading...</p></div></td></tr></tbody>
+            </table>
+        </div>
+        <div class="add-form" id="investments-form">
+            <div class="form-grid">
+                <div class="fg"><label>Name</label><input id="i-name" placeholder="e.g. ASB, Unit Trust"></div>
+                <div class="fg"><label>Type</label>
+                    <select id="i-type">
+                        <option>ASB</option><option>Unit Trust</option><option>Bonds</option>
+                        <option>Crypto</option><option>Gold</option><option>Fixed Deposit</option><option>Other</option>
+                    </select>
+                </div>
+                <div class="fg"><label>Amount (RM)</label><input type="number" id="i-amount" placeholder="0.00" step="0.01"></div>
+                <div class="fg"><label>Date</label><input type="date" id="i-date"></div>
+                <div class="fg" style="grid-column:span 2"><label>Notes (optional)</label><input id="i-notes" placeholder="Any remarks..."></div>
+            </div>
+            <div class="form-actions">
+                <button class="btn-save" id="inv-save-btn" onclick="addInv()">Save Entry</button>
+                <button class="btn-cxl" onclick="toggle('investments')">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ── PROPERTY ── -->
+    <div class="card">
+        <div class="card-head">
+            <div class="card-title-row">
+                <span class="card-icon">⬡</span>
+                <span class="card-title">Property</span>
+                <span class="card-count" id="prop-count">—</span>
+            </div>
+            <div class="card-stats">
+                <div class="stat">
+                    <div class="stat-lbl">Total Value</div>
+                    <div class="stat-val" id="prop-total">—</div>
+                </div>
+                <button class="btn-add" onclick="toggle('property')">+ Add</button>
+            </div>
+        </div>
+        <div class="tbl-wrap">
+            <table>
+                <thead><tr>
+                    <th>Name</th><th>Location</th><th>Current Value (RM)</th>
+                    <th>Purchase Price (RM)</th><th>Gain / Loss</th><th>Actions</th>
+                </tr></thead>
+                <tbody id="prop-body"><tr><td colspan="6"><div class="loading"><p>Loading...</p></div></td></tr></tbody>
+            </table>
+        </div>
+        <div class="add-form" id="property-form">
+            <div class="form-grid">
+                <div class="fg"><label>Property Name</label><input id="p-name" placeholder="e.g. Rumah Taman Maju"></div>
+                <div class="fg"><label>Location</label><input id="p-loc" placeholder="e.g. Kuala Lumpur"></div>
+                <div class="fg"><label>Current Value (RM)</label><input type="number" id="p-val" placeholder="0" step="1000"></div>
+                <div class="fg"><label>Purchase Price (RM)</label><input type="number" id="p-buy" placeholder="0" step="1000"></div>
+                <div class="fg"><label>Purchase Date</label><input type="date" id="p-date"></div>
+                <div class="fg"><label>Type</label>
+                    <select id="p-type">
+                        <option>Residential</option><option>Commercial</option><option>Land</option><option>Industrial</option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-actions">
+                <button class="btn-save" id="prop-save-btn" onclick="addProp()">Save Entry</button>
+                <button class="btn-cxl" onclick="toggle('property')">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ── STOCKS ── -->
+    <div class="card">
+        <div class="card-head">
+            <div class="card-title-row">
+                <span class="card-icon">◎</span>
+                <span class="card-title">Stocks</span>
+                <span class="card-count" id="stk-count">—</span>
+            </div>
+            <div class="card-stats">
+                <div class="stat">
+                    <div class="stat-lbl">Portfolio Value</div>
+                    <div class="stat-val" id="stk-total">—</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-lbl">Total P&amp;L</div>
+                    <div class="stat-val" id="stk-pnl">—</div>
+                </div>
+                <button class="btn-add" onclick="toggle('stocks')">+ Add</button>
+            </div>
+        </div>
+        <div class="tbl-wrap">
+            <table>
+                <thead><tr>
+                    <th>Ticker</th><th>Name</th><th>Shares</th>
+                    <th>Avg Price</th><th>Current Price</th><th>Value (RM)</th><th>P&amp;L</th><th>Actions</th>
+                </tr></thead>
+                <tbody id="stk-body"><tr><td colspan="8"><div class="loading"><p>Loading...</p></div></td></tr></tbody>
+            </table>
+        </div>
+        <div class="add-form" id="stocks-form">
+            <div class="form-grid">
+                <div class="fg"><label>Ticker</label><input id="s-ticker" placeholder="e.g. MAYBANK" style="text-transform:uppercase"></div>
+                <div class="fg"><label>Company Name</label><input id="s-name" placeholder="e.g. Maybank Bhd"></div>
+                <div class="fg"><label>Shares</label><input type="number" id="s-shares" placeholder="100" step="1"></div>
+                <div class="fg"><label>Avg Buy Price (RM)</label><input type="number" id="s-avg" placeholder="0.00" step="0.01"></div>
+                <div class="fg"><label>Current Price (RM)</label><input type="number" id="s-cur" placeholder="0.00" step="0.01"></div>
+                <div class="fg"><label>Exchange</label>
+                    <select id="s-exch">
+                        <option>Bursa</option><option>NYSE</option><option>NASDAQ</option><option>SGX</option><option>Other</option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-actions">
+                <button class="btn-save" id="stk-save-btn" onclick="addStk()">Save Entry</button>
+                <button class="btn-cxl" onclick="toggle('stocks')">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+</main>
+
+<footer>
+    <p>OrcaHS9 — Family Wealth Dashboard v1.0</p>
+    <p class="lu" id="lu-time">—</p>
+</footer>
+
+<script>
+// ── API Layer ─────────────────────────────────────────────────────
+const api = {
+    get:  (s)     => fetch(`/api/${s}`).then(r => r.json()),
+    post: (s, d)  => fetch(`/api/${s}`, { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify(d) }).then(r => r.json()),
+    del:  (s, id) => fetch(`/api/${s}/${id}`, { method:'DELETE' })
+};
+
+let DATA = { investments:[], property:[], stocks:[] };
+
+// ── Format ────────────────────────────────────────────────────────
+const rm  = n => 'RM ' + Number(n).toLocaleString('en-MY',{minimumFractionDigits:2,maximumFractionDigits:2});
+const rmK = n => {
+    const a=Math.abs(n);
+    if(a>=1e6) return (n<0?'-':'')+'RM '+(Math.abs(n)/1e6).toFixed(2)+'M';
+    if(a>=1e3) return (n<0?'-':'')+'RM '+(Math.abs(n)/1e3).toFixed(1)+'K';
+    return rm(n);
+};
+const fmtD = d => d ? new Date(d).toLocaleDateString('en-MY',{day:'numeric',month:'short',year:'numeric'}) : '—';
+const sign = n => n>0?'+':'';
+const pc   = n => n>0?'pos':n<0?'neg':'';
+
+const BADGE = { 'ASB':'b-green','Unit Trust':'b-blue','Bonds':'b-gold','Crypto':'b-red','Gold':'b-gold','Fixed Deposit':'b-blue','Residential':'b-blue','Commercial':'b-gold','Land':'b-green','Bursa':'b-blue','NYSE':'b-green','NASDAQ':'b-green','SGX':'b-gold' };
+const badge = t => `<span class="badge ${BADGE[t]||'b-blue'}">${t}</span>`;
+
+// ── Render ────────────────────────────────────────────────────────
+function renderInv() {
+    const data = DATA.investments;
+    const total = data.reduce((s,e) => s + +e.amount, 0);
+    document.getElementById('inv-count').textContent = data.length + (data.length===1?' entry':' entries');
+    document.getElementById('inv-total').textContent = rmK(total);
+    const tb = document.getElementById('inv-body');
+    if(!data.length) { tb.innerHTML = `<tr><td colspan="6"><div class="empty"><p>No investments recorded yet.</p></div></td></tr>`; return total; }
+    tb.innerHTML = data.map(e=>`<tr>
+        <td>${e.name}</td>
+        <td>${badge(e.type)}</td>
+        <td class="val">${rm(e.amount)}</td>
+        <td class="mono">${fmtD(e.date)}</td>
+        <td style="color:var(--text-2);font-size:.8rem">${e.notes||'—'}</td>
+        <td><div class="row-actions"><button class="btn-del" onclick="del('investments','${e.id}')" title="Delete">✕</button></div></td>
+    </tr>`).join('');
+    return total;
+}
+
+function renderProp() {
+    const data = DATA.property;
+    const total = data.reduce((s,e) => s + +e.value, 0);
+    document.getElementById('prop-count').textContent = data.length + (data.length===1?' entry':' entries');
+    document.getElementById('prop-total').textContent = rmK(total);
+    const tb = document.getElementById('prop-body');
+    if(!data.length) { tb.innerHTML = `<tr><td colspan="6"><div class="empty"><p>No properties recorded yet.</p></div></td></tr>`; return total; }
+    tb.innerHTML = data.map(e=>{
+        const gain = +e.value - +e.purchase;
+        const gp   = e.purchase ? ((gain/+e.purchase)*100).toFixed(1) : 0;
+        return `<tr>
+            <td>${e.name}</td>
+            <td style="color:var(--text-2)">${e.location||'—'}</td>
+            <td class="val">${rm(e.value)}</td>
+            <td class="val" style="color:var(--text-2)">${rm(e.purchase)}</td>
+            <td class="${pc(gain)}">${sign(gain)}${rm(gain)}<br><span style="font-size:.7rem;opacity:.7">${sign(gain)}${gp}%</span></td>
+            <td><div class="row-actions"><button class="btn-del" onclick="del('property','${e.id}')" title="Delete">✕</button></div></td>
+        </tr>`;
+    }).join('');
+    return total;
+}
+
+function renderStk() {
+    const data = DATA.stocks;
+    const portVal  = data.reduce((s,e) => s + +e.shares * +e.current, 0);
+    const costBase = data.reduce((s,e) => s + +e.shares * +e.avg, 0);
+    const pnl      = portVal - costBase;
+    document.getElementById('stk-count').textContent = data.length + (data.length===1?' entry':' entries');
+    document.getElementById('stk-total').textContent = rmK(portVal);
+    const pnlEl = document.getElementById('stk-pnl');
+    pnlEl.textContent = sign(pnl) + rmK(pnl);
+    pnlEl.style.color = pnl >= 0 ? 'var(--green)' : 'var(--red)';
+    const tb = document.getElementById('stk-body');
+    if(!data.length) { tb.innerHTML = `<tr><td colspan="8"><div class="empty"><p>No stocks recorded yet.</p></div></td></tr>`; return portVal; }
+    tb.innerHTML = data.map(e=>{
+        const val=+e.shares*+e.current, cost=+e.shares*+e.avg, p=val-cost;
+        const pp = cost ? ((p/cost)*100).toFixed(1) : 0;
+        return `<tr>
+            <td class="mono" style="color:var(--gold);letter-spacing:.06em">${e.ticker}</td>
+            <td>${e.name}</td>
+            <td class="mono">${(+e.shares).toLocaleString()}</td>
+            <td class="mono">${rm(e.avg)}</td>
+            <td class="mono">${rm(e.current)}</td>
+            <td class="val">${rm(val)}</td>
+            <td class="${pc(p)}">${sign(p)}${rm(p)}<br><span style="font-size:.7rem;opacity:.7">${sign(p)}${pp}%</span></td>
+            <td><div class="row-actions"><button class="btn-del" onclick="del('stocks','${e.id}')" title="Delete">✕</button></div></td>
+        </tr>`;
+    }).join('');
+    return portVal;
+}
+
+function render() {
+    const t1 = renderInv(), t2 = renderProp(), t3 = renderStk();
+    document.getElementById('grand-total').textContent = rm(t1+t2+t3);
+    document.getElementById('lu-time').textContent = 'Last updated ' + new Date().toLocaleString('en-MY',{dateStyle:'medium',timeStyle:'short'});
+}
+
+// ── Load ──────────────────────────────────────────────────────────
+async function loadAll() {
+    const [inv, prop, stk] = await Promise.all([
+        api.get('investments'), api.get('property'), api.get('stocks')
+    ]);
+    DATA.investments = inv;
+    DATA.property    = prop;
+    DATA.stocks      = stk;
+    render();
+}
+
+// ── Delete ────────────────────────────────────────────────────────
+async function del(section, id) {
+    if(!confirm('Remove this entry?')) return;
+    await api.del(section, id);
+    DATA[section] = DATA[section].filter(e => e.id !== id);
+    render();
+}
+
+// ── Forms ─────────────────────────────────────────────────────────
+function toggle(sec) { document.getElementById(sec+'-form').classList.toggle('open'); }
+
+async function addInv() {
+    const name = document.getElementById('i-name').value.trim();
+    const amt  = document.getElementById('i-amount').value;
+    if(!name||!amt) return alert('Name and Amount are required.');
+    const btn = document.getElementById('inv-save-btn');
+    btn.disabled = true; btn.textContent = 'Saving...';
+    const e = await api.post('investments', { name, type:document.getElementById('i-type').value, amount:parseFloat(amt), date:document.getElementById('i-date').value, notes:document.getElementById('i-notes').value.trim() });
+    DATA.investments.push(e);
+    ['i-name','i-amount','i-notes'].forEach(x=>document.getElementById(x).value='');
+    btn.disabled=false; btn.textContent='Save Entry';
+    toggle('investments'); render();
+}
+
+async function addProp() {
+    const name = document.getElementById('p-name').value.trim();
+    const val  = document.getElementById('p-val').value;
+    if(!name||!val) return alert('Property Name and Current Value are required.');
+    const btn = document.getElementById('prop-save-btn');
+    btn.disabled=true; btn.textContent='Saving...';
+    const e = await api.post('property', { name, location:document.getElementById('p-loc').value.trim(), value:parseFloat(val), purchase:parseFloat(document.getElementById('p-buy').value)||0, date:document.getElementById('p-date').value, type:document.getElementById('p-type').value });
+    DATA.property.push(e);
+    ['p-name','p-loc','p-val','p-buy'].forEach(x=>document.getElementById(x).value='');
+    btn.disabled=false; btn.textContent='Save Entry';
+    toggle('property'); render();
+}
+
+async function addStk() {
+    const ticker = document.getElementById('s-ticker').value.trim().toUpperCase();
+    const shares = document.getElementById('s-shares').value;
+    const avg    = document.getElementById('s-avg').value;
+    const cur    = document.getElementById('s-cur').value;
+    if(!ticker||!shares||!avg) return alert('Ticker, Shares and Avg Price are required.');
+    const btn = document.getElementById('stk-save-btn');
+    btn.disabled=true; btn.textContent='Saving...';
+    const e = await api.post('stocks', { ticker, name:document.getElementById('s-name').value.trim()||ticker, shares:parseFloat(shares), avg:parseFloat(avg), current:parseFloat(cur)||parseFloat(avg), exchange:document.getElementById('s-exch').value });
+    DATA.stocks.push(e);
+    ['s-ticker','s-name','s-shares','s-avg','s-cur'].forEach(x=>document.getElementById(x).value='');
+    btn.disabled=false; btn.textContent='Save Entry';
+    toggle('stocks'); render();
+}
+
+// ── Init ──────────────────────────────────────────────────────────
+document.querySelectorAll('input[type="date"]').forEach(el => { el.value = new Date().toISOString().split('T')[0]; });
+loadAll();
+</script>
+</body>
+</html>
